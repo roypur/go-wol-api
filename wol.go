@@ -4,12 +4,16 @@ import (
 	"bytes"
 	"fmt"
 	"net"
+	"net/url"
 	"bufio"
 	"strings"
 	"encoding/json"
 	"encoding/binary"
+	"io"
 	"io/ioutil"
 	"errors"
+	"golang.org/x/crypto/bcrypt"
+	"os"
 )
 
 type MACAddress [6]byte
@@ -24,7 +28,14 @@ type MagicPacket struct {
 
 
 func main(){
-    httpServer();
+    
+    if(os.Args[1] == "add"){
+        modUser("add");
+    }else if(os.Args[1] == "edit"){
+        modUser("edit");
+    }else if(os.Args[1] == "server"){
+        httpServer();
+    };
 }
 
 // This function accepts a MAC Address string, and returns a pointer to
@@ -76,6 +87,73 @@ func getHost(host string)(string,error){
     
 }
 
+func isUser(user string, pass string)(error){
+
+    file, err := ioutil.ReadFile("users.json");
+    users := make(map[string]string);
+    
+    if(err == nil){
+        err = json.Unmarshal(file, &users);
+        if((err == nil)  && (len(users[user]) > 0)){
+            
+            err = bcrypt.CompareHashAndPassword([]byte(users[user]), []byte(pass));
+            
+            if(err == nil){            
+                return nil;
+            }
+        }
+    }
+    return errors.New("user not found" + user);
+ 
+}
+
+func modUser(operation string)(error){
+    var pass string = url.QueryEscape(string(os.Args[3]));
+    var user string = url.QueryEscape(string(os.Args[2]));
+    
+    
+    file, err := ioutil.ReadFile("users.json");
+    users := make(map[string]string);
+    
+    if(err == nil){
+        err = json.Unmarshal(file, &users);
+        if(err == nil){
+            
+            if(len(users[user]) == 0 || operation == "edit"){
+            
+            
+                hash, err := bcrypt.GenerateFromPassword([]byte(pass), 10)
+            
+                if(err==nil){
+                    users[user] = string(hash);
+            
+                    b, err := json.MarshalIndent(users,"","    ");
+                
+                    if(err==nil){
+                
+                        f, err := os.Create("users.json")
+    
+                        if(err != nil){
+                            fmt.Println(err);
+                        }else{
+        
+                            _,err := io.WriteString(f, string(b));
+                            
+                            fmt.Println(err);
+                        }   
+                
+            
+                        if(err == nil){
+                            fmt.Println(string(hash));
+                            return nil;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return errors.New("something went wrong");
+}
 
 func sendPacket(apiData map[string]string)(error){
 
@@ -151,17 +229,24 @@ func parseHttp(conn net.Conn){
     
         in := make(map[string]string);
 
+
+
         err := json.Unmarshal((jsonString), &in);
         
         fmt.Println(in);
+      
+        if(isUser(in["user"], in["pass"]) == nil){
         
-        if(err == nil){
-            if(sendPacket(in) == nil){
-                status = "ok";
-            }else{
-                status = "fail";
-            }
-        }
+            if(err == nil){
+                if(sendPacket(in) == nil){
+                    status = "ok";
+                }else{
+                    status = "fail";
+                }
+            }    
+        }else{
+            status = "denied";
+        }   
     }
     
     conn.Write([]byte(status))
