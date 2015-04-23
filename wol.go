@@ -41,7 +41,7 @@ func main(){
         }
     }
 
-    if((args[1] == "add") || (args[1] == "edit") || (args[1] == "delete")){
+    if((args[1] == "add") || (args[1] == "edit") || (args[1] == "delete") || (args[1] == "del")){
         if(args[2] == "user"){
             modUser(args[1]);
         }else if(args[2] == "host"){
@@ -73,7 +73,7 @@ func encode(raw string)(string){
     translate["]"] = "-c"
     translate["{"] = "-d"
     translate["}"] = "-e"
-   translate["'"] = "-f"
+    translate["'"] = "-f"
    translate["\""] = "-g"
     translate[" "] = "-h"
     translate[","] = "-i"
@@ -301,29 +301,6 @@ func modHost(operation string){
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 func sendPacket(apiData map[string]string)(error){
 
