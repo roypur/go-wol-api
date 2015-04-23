@@ -7,8 +7,6 @@ function wake(host, user, pass, handle)
     
     pass = goEncode(pass);
 
-    console.log(pass);
-
     var data = {"host":host,"user":user,"pass":pass}
     var apiData = JSON.stringify(data);
 
