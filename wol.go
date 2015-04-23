@@ -26,17 +26,40 @@ type MagicPacket struct {
 }
 
 var path string = "";
+
+var args map[int]string;
+
 func main(){
     
-    if((os.Args[1] == "add") || (os.Args[1] == "edit") || (os.Args[1] == "delete")){
-        if(os.Args[2] == "user"){
-            modUser(os.Args[1]);
-        }else if(os.Args[2] == "host"){
-            modHost(os.Args[1]);
+    args = make(map[int]string);
+    
+    for i := 0;  i < 5; i++{
+        if(len(os.Args) > i){
+            args[i] = os.Args[i];
+        }else{
+            args[i] = "";
+        }
+    }
+
+    if((args[1] == "add") || (args[1] == "edit") || (args[1] == "delete")){
+        if(args[2] == "user"){
+            modUser(args[1]);
+        }else if(args[2] == "host"){
+            modHost(args[1]);
         }        
-    }else if(os.Args[1] == "server"){
+    }else if(args[1] == "server"){
         httpServer();
-    };
+    }else{
+        showHelp();
+    }
+}
+
+
+
+func showHelp(){
+    fmt.Println("\n./wol add|edit user|host <username>|<computer-name> <password>|<mac-address>");
+    fmt.Println("\n./wol delete <username>|<computer-name>");
+    fmt.Println("\n./wol server\n");
 }
 
 
@@ -156,10 +179,10 @@ func modUser(operation string){
     
     
     if(operation!="delete"){
-        pass = encode(string(os.Args[4]));
+        pass = encode(string(args[4]));
     };
     
-    var user string = encode(string(os.Args[3]));
+    var user string = encode(string(args[3]));
     
     
     file, err := ioutil.ReadFile(path + "users.json");
@@ -173,7 +196,7 @@ func modUser(operation string){
             
             if(operation=="delete"){
                 if(len(users[user]) == 0){
-                    fmt.Println("User<" + os.Args[3] + "> Doesn't exist");
+                    fmt.Println("User<" + args[3] + "> Doesn't exist");
                     os.Exit(-1);
                 }
                 delete(users,user);
@@ -202,7 +225,7 @@ func modUser(operation string){
                             
                             var grammar string = strings.Replace(operation + "ed","ee","e",-1);
                             
-                            fmt.Println("user<" + os.Args[3] + "> " + grammar);
+                            fmt.Println("user<" + args[3] + "> " + grammar);
                         }
                     }
                 }
@@ -226,10 +249,10 @@ func modHost(operation string){
     }
     
     if(operation!="delete"){
-        mac = string(os.Args[4]);
+        mac = string(args[4]);
     };
     
-    var host string = encode(string(os.Args[3]));
+    var host string = encode(string(args[3]));
     
     
     file, err := ioutil.ReadFile(path + "hosts.json");
@@ -241,7 +264,7 @@ func modHost(operation string){
             
             if(operation=="delete"){
                 if(len(hosts[host]) == 0){
-                    fmt.Println("Host<" + os.Args[3] + "> Doesn't exist");
+                    fmt.Println("Host<" + args[3] + "> Doesn't exist");
                     os.Exit(-1);
                 }
                 delete(hosts,host);
@@ -268,7 +291,7 @@ func modHost(operation string){
                             
                             var grammar string = strings.Replace(operation + "ed","ee","e",-1);
                             
-                            fmt.Println("host<" + os.Args[3] + "> " + grammar);
+                            fmt.Println("host<" + args[3] + "> " + grammar);
                         }
                     }
                 }
