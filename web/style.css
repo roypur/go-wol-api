@@ -1,10 +1,14 @@
+body{
+    background-color:#112222;
+}
+
 #outer{
-    width:500px;
-    height:500px;
-    background-color:#ccddcc;
+    width:420px;
+    height:350px;
+    background-color:#bbcccc;
     margin-left:auto;
     margin-right:auto;
-    margin-top:100px;
+    margin-top:200px;
 }
 
 #left{
@@ -12,8 +16,9 @@
     width:170px;
     height:350px;
     background-color:#bbcccc;
-    top:60px;
-    margin-left:40px;
+    margin:0px;
+    padding:0px;
+    border:0px;
     float:left;
 }
 
@@ -22,8 +27,9 @@
     width:250px;
     height:350px;
     background-color:#bbcccc;
-    top:60px;
-    margin-right:40px;
+    margin:0px;
+    padding:0px;
+    border:0px;
     float:right;
 }
 
@@ -36,7 +42,6 @@
     padding:5px;
     border:5px;
     border-style:solid;
-    
 }
 
 .l1{
@@ -50,6 +55,10 @@
 .l3{
     position:relative;
     top:110px;
+}
+.l4{
+    position:relative;
+    top:140px;
 }
 
 .left-input{

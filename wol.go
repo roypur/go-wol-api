@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"fmt"
 	"net"
-	"net/url"
 	"bufio"
 	"strings"
 	"encoding/json"
@@ -26,15 +25,45 @@ type MagicPacket struct {
     payload [16]MACAddress
 }
 
-
+var path string = "";
 func main(){
     
     if((os.Args[1] == "add") || (os.Args[1] == "edit") || (os.Args[1] == "delete")){
-        modUser(os.Args[1]);
+        if(os.Args[2] == "user"){
+            modUser(os.Args[1]);
+        }else if(os.Args[2] == "host"){
+            modHost(os.Args[1]);
+        }        
     }else if(os.Args[1] == "server"){
         httpServer();
     };
 }
+
+
+func encode(raw string)(string){
+
+    translate := make(map[string]string);
+    
+    var out string = strings.Replace(raw, "-", "-a", -1);
+
+    translate["["] = "-b"
+    translate["]"] = "-c"
+    translate["{"] = "-d"
+    translate["}"] = "-e"
+   translate["'"] = "-f"
+   translate["\""] = "-g"
+    translate[" "] = "-h"
+    translate[","] = "-i"
+    translate[":"] = "-j"
+    
+    for k, v := range translate {
+        out = strings.Replace(out, k, v, -1);
+        //fmt.Println(out);
+    }
+    return out;
+}
+
+
 
 // This function accepts a MAC Address string, and returns a pointer to
 // a MagicPacket object. A Magic Packet is a broadcast frame which
@@ -82,7 +111,7 @@ func makePacket(mac string) (*MagicPacket, error) {
 
 func getHost(host string)(string,error){
 
-    file, err := ioutil.ReadFile("hosts.json");
+    file, err := ioutil.ReadFile(path + "hosts.json");
     hosts := make(map[string]string);
     
     if(err == nil){
@@ -99,7 +128,7 @@ func getHost(host string)(string,error){
 
 func isUser(user string, pass string)(error){
 
-    file, err := ioutil.ReadFile("users.json");
+    file, err := ioutil.ReadFile(path + "users.json");
     users := make(map[string]string);
     
     if(err == nil){
@@ -120,14 +149,20 @@ func isUser(user string, pass string)(error){
 func modUser(operation string){
     var pass string;
     
+    
+    if(operation == "del"){
+        operation = "delete";
+    }
+    
+    
     if(operation!="delete"){
-        pass = url.QueryEscape(string(os.Args[3]));
+        pass = encode(string(os.Args[4]));
     };
     
-    var user string = url.QueryEscape(string(os.Args[2]));
+    var user string = encode(string(os.Args[3]));
     
     
-    file, err := ioutil.ReadFile("users.json");
+    file, err := ioutil.ReadFile(path + "users.json");
     users := make(map[string]string);
     
     if(err == nil){
@@ -137,7 +172,12 @@ func modUser(operation string){
             var hash []byte;
             
             if(operation=="delete"){
+                if(len(users[user]) == 0){
+                    fmt.Println("User<" + os.Args[3] + "> Doesn't exist");
+                    os.Exit(-1);
+                }
                 delete(users,user);
+                
             }else if(len(users[user]) == 0){
                 hash, err = bcrypt.GenerateFromPassword([]byte(pass), 10);
                 users[user] = string(hash);
@@ -147,17 +187,11 @@ func modUser(operation string){
                 
             if(err==nil){
                     
-                if(operation=="delete"){
-                    delete(users,user);
-                }else{
-                    users[user] = string(hash);
-                }
-                    
                 b, err := json.MarshalIndent(users,"","    ");
                 
                 if(err==nil){
                 
-                    f, err := os.Create("users.json")
+                    f, err := os.Create(path + "users.json")
 
                     if(err != nil){
                         fmt.Println(err);
@@ -168,7 +202,7 @@ func modUser(operation string){
                             
                             var grammar string = strings.Replace(operation + "ed","ee","e",-1);
                             
-                            fmt.Println("user<" + user + "> " + grammar);
+                            fmt.Println("user<" + os.Args[3] + "> " + grammar);
                         }
                     }
                 }
@@ -178,6 +212,95 @@ func modUser(operation string){
         }
     }
 }
+
+
+
+
+
+
+func modHost(operation string){
+    var mac string;
+    
+    if(operation == "del"){
+        operation = "delete";
+    }
+    
+    if(operation!="delete"){
+        mac = string(os.Args[4]);
+    };
+    
+    var host string = encode(string(os.Args[3]));
+    
+    
+    file, err := ioutil.ReadFile(path + "hosts.json");
+    hosts := make(map[string]string);
+    
+    if(err == nil){
+        err = json.Unmarshal(file, &hosts);
+        if(err == nil){
+            
+            if(operation=="delete"){
+                if(len(hosts[host]) == 0){
+                    fmt.Println("Host<" + os.Args[3] + "> Doesn't exist");
+                    os.Exit(-1);
+                }
+                delete(hosts,host);
+            }else if(len(hosts[host]) == 0){
+                hosts[host] = string(mac);
+            }else{
+                err = errors.New("Host exists")
+            }
+                
+            if(err==nil){
+                    
+                b, err := json.MarshalIndent(hosts,"","    ");
+                
+                if(err==nil){
+                
+                    f, err := os.Create(path + "hosts.json")
+
+                    if(err != nil){
+                        fmt.Println(err);
+                    }else{
+                        _,err := io.WriteString(f, string(b));
+                        
+                        if(err == nil){
+                            
+                            var grammar string = strings.Replace(operation + "ed","ee","e",-1);
+                            
+                            fmt.Println("host<" + os.Args[3] + "> " + grammar);
+                        }
+                    }
+                }
+            }else{
+                fmt.Println(err);
+            }
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 func sendPacket(apiData map[string]string)(error){
 
