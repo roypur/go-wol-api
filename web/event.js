@@ -25,5 +25,20 @@ function error(response)
         $("#outer").css({"top":"80px"});
         $("#error").html("host not found");        
     }
+    else if(response == "fail")
+    {
+        $("#error").show();
+        $("#outer").css({"top":"80px"});
+        $("#error").html("host not found");        
+    }
     return null;
+}
+
+$(document).ajaxError(serverDown);
+
+function serverDown()
+{
+    $("#error").show();
+    $("#outer").css({"top":"80px"});
+    $("#error").html("Service Unavailable"); 
 }
