@@ -33,11 +33,18 @@ func main(){
     
     args = make(map[int]string);
     
-    for i := 0;  i < 5; i++{
+    for i := 0;  i < 7; i++{
         if(len(os.Args) > i){
             args[i] = os.Args[i];
         }else{
             args[i] = "";
+        }
+    }
+
+    if(args[1] == "dir"){
+        path = args[2];
+        for i := 0;  i < 5; i++{
+            args[i] = args[i+2];
         }
     }
 
