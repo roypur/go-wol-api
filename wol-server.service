@@ -1,0 +1,11 @@
+Unit]
+Description=Wake on Lan API server
+After=network.target
+
+[Service]
+User=wol-server
+ExecStart=/path/to/binary dir /path/to/config/directory/ server
+KillMode=process
+
+[Install]
+WantedBy=network.target
