@@ -368,8 +368,6 @@ func parseHttp(conn net.Conn){
         in := make(map[string]string);
 
         err := json.Unmarshal((jsonString), &in);
-        
-        fmt.Println(in);
       
         if(isUser(in["user"], in["pass"]) == nil){
         
