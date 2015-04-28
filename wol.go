@@ -48,12 +48,22 @@ func main(){
         }
     }
 
-    if((args[1] == "add") || (args[1] == "edit") || (args[1] == "delete") || (args[1] == "del")){
+    if((args[1] == "delete") || (args[1] == "del")){
         if(args[2] == "user"){
             modUser(args[1]);
         }else if(args[2] == "host"){
             modHost(args[1]);
-        }        
+        }else{
+            showHelp();
+        }     
+    }else if(((args[1] == "add") || (args[1] == "edit")) && ((len(args[3]) > 0) && (len(args[4]) > 0))){
+        if(args[2] == "user"){
+            modUser(args[1]);
+        }else if(args[2] == "host"){
+            modHost(args[1]);
+        }else{
+            showHelp();
+        }  
     }else if(args[1] == "server"){
         httpServer();
     }else{
@@ -64,9 +74,10 @@ func main(){
 
 
 func showHelp(){
-    fmt.Println("\n./wol add|edit user|host <username>|<computer-name> <password>|<mac-address>");
-    fmt.Println("\n./wol delete <username>|<computer-name>");
-    fmt.Println("\n./wol server\n");
+    fmt.Println("\ndir <conf-dir> (optional)");
+    fmt.Println("\nadd|edit|delete|server");
+    fmt.Println("\nuser|host <username>|<computer-name>");
+    fmt.Println("\n<password>|<mac-address>\n");
 }
 
 
@@ -344,7 +355,7 @@ func parseHttp(conn net.Conn){
     
     header := parseHeader(*message);
     
-    reply := []byte("HTTP/1.1 200 OK\nAccess-Control-Allow-Origin: *\nAccess-Control-Allow-Headers: x-api\nAccess-Control-Allow-Methods: POST\nContent-Type: text/html; charset=utf-8\n\n");
+    reply := []byte("HTTP/1.1 200 OK\r\nAccess-Control-Allow-Origin: *\r\nAccess-Control-Allow-Headers: x-api\r\nAccess-Control-Allow-Methods: POST\r\nContent-Type: text/html; charset=utf-8\r\n\r\n");
     
     var status string;  
     
