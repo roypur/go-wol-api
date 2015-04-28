@@ -6,6 +6,7 @@ After=network.target
 User=wol-server
 ExecStart=/path/to/binary dir /path/to/config/directory/ server
 KillMode=process
+Restart=on-failure
 
 [Install]
 WantedBy=network.target
