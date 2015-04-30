@@ -65,10 +65,21 @@ func main(){
 
 
 func showHelp(){
-    fmt.Println("\ndir <conf-dir> (optional)");
-    fmt.Println("\nadd|edit|delete|server");
-    fmt.Println("\nuser|host <username>|<computer-name>");
-    fmt.Println("\n<password>|<mac-address>\n");
+    fmt.Println("\n");
+    fmt.Println("# # # # # # # # # # # # # # # # # # # # # #");
+    fmt.Println("#                                         #");
+    fmt.Println("#  Usage:                                 #");
+    fmt.Println("#                                         #");
+    fmt.Println("#  dir <conf-dir> (optional)              #");
+    fmt.Println("#                                         #");
+    fmt.Println("#  add|edit|delete|server                 #");
+    fmt.Println("#                                         #");
+    fmt.Println("#  user|host <username>|<computer-name>   #");
+    fmt.Println("#                                         #");
+    fmt.Println("#  <password>|<mac-address>               #");
+    fmt.Println("#                                         #");
+    fmt.Println("# # # # # # # # # # # # # # # # # # # # # #");
+    fmt.Println("\n");
 }
 
 

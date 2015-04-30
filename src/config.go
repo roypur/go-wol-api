@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 var config map[string]string;
@@ -19,7 +20,7 @@ func setPath(){
             args[i] = args[i+2];
         }
     }else{
-        configPath,_ = filepath.Abs("");
+        configPath,_ = filepath.Abs("config");
     }
 }
 
@@ -29,9 +30,52 @@ func getConf(){
     _,hostErr := os.Stat(configPath + "/hosts.json");
     _,userErr := os.Stat(configPath + "/users.json");
     
+    var accept bool = false; 
+    
+    var folder bool = false;
+    
+    if(os.IsNotExist(confErr) || os.IsNotExist(hostErr) || os.IsNotExist(userErr)){
+        var answer string;
+        
+        fmt.Println("\nThe following config files are missing:\n");
+        
+        if(os.IsNotExist(confErr)){
+            fmt.Println("config.json")
+        }
+        if(os.IsNotExist(confErr)){
+            fmt.Println("users.json")
+        }        
+        if(os.IsNotExist(confErr)){
+            fmt.Println("hosts.json")
+        }
+        
+        fmt.Println("\nDo you want them to be automatically created in the following directory?\n");
+        fmt.Println(configPath + "/");
+        fmt.Println("\n(Yes/No)\n");
+        fmt.Scanln(&answer);
+        
+        fmt.Println();
+        
+        answer = strings.Trim(answer," ");
+        
+        if((strings.ToLower(answer)=="y") || (strings.ToLower(answer)=="yes")){
+            err := os.MkdirAll(configPath, 0755);
+            accept = true;
+            if(err==nil){
+                folder = true;
+            }else{
+                fmt.Println(err);
+            }
+        }
+    }
+    
+    
+    
     config = make(map[string]string);
     
-    if(os.IsNotExist(userErr)){
+    
+    
+    if(os.IsNotExist(userErr) && accept && folder){
         
         f, err := os.Create(configPath + "/users.json")
         if(err==nil){
@@ -46,7 +90,7 @@ func getConf(){
             fmt.Println(err);
         }
     }
-    if(os.IsNotExist(hostErr)){
+    if(os.IsNotExist(hostErr) && accept && folder){
         
         f, err := os.Create(configPath + "/hosts.json")
         if(err==nil){
@@ -62,7 +106,7 @@ func getConf(){
         }
         
     }    
-    if(os.IsNotExist(confErr)){
+    if(os.IsNotExist(confErr) && accept && folder){
         
         f, err := os.Create(configPath + "/config.json")
         if(err==nil){    
@@ -79,7 +123,7 @@ func getConf(){
         }else{
             fmt.Println(err);
         }
-    }else{
+    }else if(accept == false){
         file, err := ioutil.ReadFile(configPath + "/config.json");
         if(err==nil){
             err = json.Unmarshal(file, &config);
