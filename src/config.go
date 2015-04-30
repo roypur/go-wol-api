@@ -123,7 +123,7 @@ func getConf(){
         }else{
             fmt.Println(err);
         }
-    }else if(accept == false){
+    }else if(accept == false && !os.IsNotExist(confErr)){
         file, err := ioutil.ReadFile(configPath + "/config.json");
         if(err==nil){
             err = json.Unmarshal(file, &config);
