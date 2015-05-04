@@ -2,28 +2,28 @@
 
 to add a user
 
-    ./wol add user <username> <password>
+    ./wol-server add user <username> <password>
 
 to delete a user
 
-    ./wol delete user <username>
+    ./wol-server delete user <username>
     
 to edit a user
 
-    ./wol edit user <username> <password>
+    ./wol-server edit user <username> <password>
 
 to add a host
 
-    ./wol add host <host> <mac>
+    ./wol-server add host <host> <mac>
 
 to delete a host
 
-    ./wol delete host <host>
+    ./wol-server delete host <host>
     
 to edit a host
 
-    ./wol edit user <host> <mac>
+    ./wol-server edit user <host> <mac>
  
 to run server
 
-    ./wol server
+    ./wol-server server
