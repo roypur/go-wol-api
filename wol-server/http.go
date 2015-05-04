@@ -25,8 +25,8 @@ func parseHttp(conn net.Conn){
     
     reply := []byte("HTTP/1.1 200 OK\r\nAccess-Control-Allow-Origin: *\r\nAccess-Control-Allow-Headers: x-api\r\nAccess-Control-Allow-Methods: POST\r\nContent-Type: text/html; charset=utf-8\r\n\r\n");
     
-    var status string;  
-    
+    var status string;
+
     conn.Write(reply);
     
     if(len(header["x-api:"]) > 0){
