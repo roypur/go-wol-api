@@ -31,29 +31,30 @@ function error(response)
         $("#outer").css({"top":"80px"});
         $("#error").html("host not found");        
     }
+    else if(response == "down")
+    {
+        $("#error").show();
+        $("#outer").css({"top":"80px"});
+        $("#error").html("Service Unavailable");     
+    }
     return null;
 }
-
-$(document).ajaxError(serverDown);
 
 function serverDown()
 {
     $("#error").show();
     $("#outer").css({"top":"80px"});
-    $("#error").html("Service Unavailable"); 
+    $("#error").html("Service Unavailable");
 }
+
+
 
 function wake(host, user, pass, handle)
 {
 
-    host = f.encode(host);
-    
-    user = f.encode(user);
-    
-    pass = f.encode(pass);
-
     var data = {"host":host,"user":user,"pass":pass}
-    var apiData = JSON.stringify(data);
+    var apiData = f.stringify(data);
 
-    f.api(apiData, "http://home.purser.it:8781", handle);
+    f.api(apiData, ["http://oxygen.purser.it:8781","http://home.purser.it:8781"], error, serverDown);
+
 }
