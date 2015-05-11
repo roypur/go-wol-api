@@ -98,6 +98,9 @@ func encode(raw string)(string){
     translate[" "] = "-h"
     translate[","] = "-i"
     translate[":"] = "-j"
+   translate["\n"] = "-k"
+   translate["\r"] = "-l"
+   translate["\t"] = "-m"
     
     for k, v := range translate {
         out = strings.Replace(out, k, v, -1);
