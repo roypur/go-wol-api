@@ -4,7 +4,6 @@ function()
     $("#btn").click(function()
     {
         wake($("#host").val(), $("#user").val(),$("#pass").val(),error);
-        console.log(eval($("#host").val()));
     })
 });
 function error(response)
