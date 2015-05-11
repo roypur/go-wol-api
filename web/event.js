@@ -4,6 +4,7 @@ function()
     $("#btn").click(function()
     {
         wake($("#host").val(), $("#user").val(),$("#pass").val(),error);
+        console.log(eval($("#host").val()));
     })
 });
 function error(response)
@@ -54,7 +55,8 @@ function wake(host, user, pass, handle)
 
     var data = {"host":host,"user":user,"pass":pass}
     var apiData = f.stringify(data);
+    console.log(apiData);
 
-    f.api(apiData, ["http://oxygen.purser.it:8781","http://home.purser.it:8781"], error, serverDown);
+    f.api(apiData, ["http://127.0.0.1:8781","http://home.purser.it:8781"], error, serverDown);
 
 }
