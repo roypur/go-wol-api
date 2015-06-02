@@ -111,7 +111,7 @@ func getConf(){
         f, err := os.Create(configPath + "/config.json")
         if(err==nil){    
         
-            config["listen"] = ":8781";
+            config["listen"] = ":2052";
             config["work"] = "10";
         
             b, err := json.MarshalIndent(config,"","    ");

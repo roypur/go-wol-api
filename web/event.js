@@ -55,6 +55,6 @@ function wake(host, user, pass, handle)
     var data = {"host":host,"user":user,"pass":pass}
     var apiData = f.stringify(data);
 
-    f.api(apiData, ["http://oxygen.purser.it:8781","http://home.purser.it:8781"], error, serverDown);
+    f.api(apiData, ["http://wol.purser.it:2052"], error, serverDown);
 
 }
