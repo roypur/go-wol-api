@@ -25,18 +25,6 @@ function error(response)
         $("#outer").css({"top":"80px"});
         $("#error").html("host not found");        
     }
-    else if(response == "fail")
-    {
-        $("#error").show();
-        $("#outer").css({"top":"80px"});
-        $("#error").html("host not found");        
-    }
-    else if(response == "down")
-    {
-        $("#error").show();
-        $("#outer").css({"top":"80px"});
-        $("#error").html("Service Unavailable");     
-    }
     return null;
 }
 
@@ -55,6 +43,6 @@ function wake(host, user, pass, handle)
     var data = {"host":host,"user":user,"pass":pass}
     var apiData = f.stringify(data);
 
-    f.api(apiData, ["http://wol.purser.it:2052"], error, serverDown);
+    f.api(apiData, ["http://wol.9f.no:2052"], error, serverDown);
 
 }
