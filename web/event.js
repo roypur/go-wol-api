@@ -43,6 +43,6 @@ function wake(host, user, pass, handle)
     var data = {"host":host,"user":user,"pass":pass}
     var apiData = f.stringify(data);
 
-    f.api(apiData, ["http://wol.9f.no:2052"], error, serverDown);
+    f.api(apiData, ["http://home.royolav.net:2052"], error, serverDown);
 
 }
