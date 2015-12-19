@@ -21,7 +21,7 @@ func modHost(operation string){
         mac = string(args[4]);
     };
     
-    var host string = encode(string(args[3]));
+    var host string = string(args[3]);
     
     
     file, err := ioutil.ReadFile(configPath + "/hosts.json");

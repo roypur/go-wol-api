@@ -23,10 +23,10 @@ func modUser(operation string){
     
     
     if(operation!="delete"){
-        pass = encode(string(args[4]));
+        pass = args[4];
     };
     
-    var user string = encode(string(args[3]));
+    var user string = args[3];
     
     
     file, err := ioutil.ReadFile(configPath + "/users.json");

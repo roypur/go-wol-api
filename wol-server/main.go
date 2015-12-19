@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"strings"
 	"encoding/json"
 	"io/ioutil"
 	"errors"
@@ -86,9 +85,7 @@ func httpHandler(req goapi.Request){
                 }
                 
                 b,err := json.Marshal(list)
-                
-                fmt.Println(err)
-                fmt.Println(string(b))
+
                 if(err==nil){
                     status = string(b)
                 }else{
@@ -130,30 +127,6 @@ func showHelp(){
     fmt.Println("#                                         #");
     fmt.Println("# # # # # # # # # # # # # # # # # # # # # #");
     fmt.Println("\n");
-}
-
-
-func encode(raw string)(string){
-
-    translate := make(map[string]string);
-    
-    var out string = strings.Replace(raw, "-", "-a", -1);
-
-    translate["["] = "-b"
-    translate["]"] = "-c"
-    translate["{"] = "-d"
-    translate["}"] = "-e"
-    translate["'"] = "-f"
-   translate["\""] = "-g"
-    translate[" "] = "-h"
-    translate[","] = "-i"
-    translate[":"] = "-j"
-    
-    for k, v := range translate {
-        out = strings.Replace(out, k, v, -1);
-        //fmt.Println(out);
-    }
-    return out;
 }
 
 func getHost(host string)(string,error){
