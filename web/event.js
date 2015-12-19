@@ -84,18 +84,19 @@ function list(user, pass, handle){
     })
     
     req.done(function(r){
-    
-        var decoded = JSON.parse(r)
 
-        var options
+        if(r.search("\\[.*\\]") >= 0){
+            var decoded = JSON.parse(r)
+
+            var options
             
-        for(var i=0; i<decoded.length; i++){
-            options += "<option value=\"" + decoded[i] + "\">"
-        }
+            for(var i=0; i<decoded.length; i++){
+                options += "<option value=\"" + decoded[i] + "\">"
+            }
         
-        $("#hosts").html(options);
-
-        handle(r)    
+            $("#hosts").html(options);
+        }
+        handle(r)
     });
     req.fail(serverDown)
 }
