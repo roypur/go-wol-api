@@ -38,9 +38,9 @@ func makePacket(mac string) (*MagicPacket, error) {
     return &packet, nil
 }
 
-func sendPacket(apiData map[string]string)(error){
+func sendPacket(hostName string)(error){
 
-    host,err := getHost(apiData["host"])
+    host,err := getHost(hostName)
     if(err == nil){
 
         packet,_ := makePacket(host);

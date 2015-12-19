@@ -8,6 +8,7 @@ import (
 	"errors"
 	"golang.org/x/crypto/bcrypt"
 	"os"
+	"github.com/roypur/goapi/src"
 )
 
 type MACAddress [6]byte
@@ -21,7 +22,6 @@ type MagicPacket struct {
 }
 
 var args map[int]string;
-
 
 func main(){
     
@@ -56,10 +56,60 @@ func main(){
             showHelp();
         }  
     }else if(args[1] == "server"){
-        httpServer();
+        goapi.Listen(httpHandler, config["listen"]);
     }else{
         showHelp();
     }
+}
+
+func httpHandler(req goapi.Request){
+        
+        var status string;
+        
+        var user string = req.Header["Goapi-User"]
+        
+        var pass string = req.Header["Goapi-Pass"]
+        
+        var host string = req.Header["Goapi-Host"]
+        
+        var list bool = req.Header["Goapi-List"] == "true"
+        
+        
+        if(isUser(user, pass) == nil){
+            if(list){                            
+                //var jsonList string;
+                
+                var list []string = []string{}
+                
+                for k,_ := range getHosts(){
+                    list = append(list,k)
+                }
+                
+                b,err := json.Marshal(list)
+                
+                fmt.Println(err)
+                fmt.Println(string(b))
+                if(err==nil){
+                    status = string(b)
+                }else{
+                    status = "no-hosts-found"
+                }
+            }else{
+                if(sendPacket(host) == nil){
+                    status = "ok";
+                }else{
+                    status = "fail";
+                }
+            }
+        }else{
+            status = "denied";
+        }
+        req.Write(goapi.Ok)
+        req.Write(req.Resp)
+        req.Write("\r\n\r\n")
+        req.Write(status)
+        req.Close()
+        
 }
 
 
@@ -108,19 +158,28 @@ func encode(raw string)(string){
 
 func getHost(host string)(string,error){
 
+    hosts := getHosts()
+       
+    if(len(hosts[host]) > 0){    
+        return hosts[host], nil;
+    }
+    return "", errors.New("host not found" + host); 
+}
+
+func getHosts()(map[string]string){
+
     file, err := ioutil.ReadFile(configPath + "/hosts.json");
+        
     hosts := make(map[string]string);
-    
+
     if(err == nil){
         err = json.Unmarshal(file, &hosts);
-        if((err == nil)  && (len(hosts[host]) > 0)){
-            
-            return hosts[host], nil;
+        
+        if(err == nil){
+            return hosts;
         }
     }
-    return "", errors.New("host not found" + host);
-    
-    
+    return nil;
 }
 
 func isUser(user string, pass string)(error){

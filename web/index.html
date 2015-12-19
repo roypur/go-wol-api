@@ -1,34 +1,49 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name=viewport content="width=450">
-    <title>Wake On Lan</title>
+<html lang="en" data-url="asd">
+  
+    <api-url>
+        http://192.168.0.10:2052/
+    </api-url>
     
-  </head>
-  <body>
-    <div id="error">
-    </div><!--end error-->
+    <head>
+        <meta charset="utf-8">
+        <meta name=viewport content="width=450">
+        <title>Wake On Lan</title>
+    
+    </head>
+    <body data-da="test">
+        <div id="error">
+        </div><!--end error-->
 
-    <div id="outer">
-        <div id="left">
-            <div class="input left-input l1">Username</div>
-            <div class="input left-input l2">Password</div>
-            <div class="input left-input l3">Host</div>
-        </div><!--end left-->
+        <div id="outer">    
+            <div id="left">
+                <div class="input left-input l1 not-logged-in" id="user-txt">Username</div>
+                <div class="input left-input l1 logged-in" id="host-txt">Host</div>
+            
+                <div class="input left-input l2 not-logged-in" id="pass-txt">Password</div>
+            </div><!--end left-->
         
-        <div id="right">
-            <input type="text" id="user" class="input right-input l1">
-            <input type="password" id="pass" class="input right-input l2">
-            <input type="text" id="host" class="input right-input l3">
-            <input type="button" id="btn" value="Wake" class="input right-input l4">
-        </div><!--end right-->
+            <div id="right">
+                <input type="text" id="user" class="input right-input l1 not-logged-in">
+                <input type="password" id="pass" class="input right-input l2 not-logged-in">
+
+                <input type="text" list="hosts" id="host" class="input right-input l1 logged-in"/>
+            
+                <datalist id="hosts">
+                </datalist>
+            
+                <input type="button" id="wake-btn" value="Wake" class="input right-input btn l2 logged-in">
+            
+                <input type="button" id="login-btn" value="Login" class="input right-input btn l3 not-logged-in">
+            
+            
+            
+            </div><!--end right-->
         
-    </div><!--end outer-->
-    <link rel="stylesheet" href="style.css">
-    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-    <script src="https://cdn.rawgit.com/roypur/9f-js/master/min/9f-013.js"></script>
-    <script src="event.js"></script>
-  </body>
+        </div><!--end outer-->
+        <link rel="stylesheet" href="style.css">
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script src="event.js"></script>
+    </body>
 </html>
 
