@@ -40,15 +40,22 @@ function error(response){
         $(".logged-in").show();
         $("#outer").css({"height":"250px"});
         
+        if(serverDown == true){
+            serverDown = false
+            $("#error").hide();
+        }
     }
 
     return null;
 }
 
+var serverDown = false
+
 function serverDown(){
     $("#error").show();
     $("#outer").css({"top":"80px"});
     $("#error").html("Service Unavailable");
+    serverDown = true
 }
 
 function notLoggedIn(){
@@ -65,7 +72,7 @@ function wake(host, user, pass, handle){
         url: apiUrl,
         crossDomain: true,
         headers: {"Goapi-User": user, "Goapi-Pass": pass, "Goapi-Host": host},
-        timeout: 1500
+        timeout: 5000
         
     })
 
@@ -79,7 +86,7 @@ function list(user, pass, handle){
         url: apiUrl,
         crossDomain: true,
         headers: {"Goapi-User": user, "Goapi-Pass": pass, "Goapi-List": "true"},
-        timeout: 1500
+        timeout: 5000
         
     })
     
