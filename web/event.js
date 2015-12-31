@@ -51,7 +51,7 @@ function error(response){
 
 var serverDown = false
 
-function serverDown(){
+function showServerDown(){
     $("#error").show();
     $("#outer").css({"top":"80px"});
     $("#error").html("Service Unavailable");
@@ -77,7 +77,7 @@ function wake(host, user, pass, handle){
     })
 
     req.done(handle);
-    req.fail(serverDown)
+    req.fail(showServerDown)
 }
 function list(user, pass, handle){
 
@@ -105,5 +105,5 @@ function list(user, pass, handle){
         }
         handle(r)
     });
-    req.fail(serverDown)
+    req.fail(showServerDown)
 }
