@@ -70,10 +70,10 @@ function wake(host, user, pass, handle){
 
     var req = $.ajax({
         url: apiUrl,
+        type: "post",
         crossDomain: true,
         headers: {"Goapi-User": user, "Goapi-Pass": pass, "Goapi-Host": host},
         timeout: 5000
-        
     })
 
     req.done(handle);
@@ -84,10 +84,10 @@ function list(user, pass, handle){
 
     var req = $.ajax({
         url: apiUrl,
+        type: "post",
         crossDomain: true,
         headers: {"Goapi-User": user, "Goapi-Pass": pass, "Goapi-List": "true"},
         timeout: 5000
-        
     })
     
     req.done(function(r){
