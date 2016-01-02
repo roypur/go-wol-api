@@ -113,6 +113,8 @@ func getConf(){
         
             config["listen"] = ":2052";
             config["work"] = "10";
+            config["cert"] = "cert.pem"
+            config["key"] = "key.pem"
         
             b, err := json.MarshalIndent(config,"","    ");
         
