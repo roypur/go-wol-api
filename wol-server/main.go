@@ -55,7 +55,7 @@ func main(){
             showHelp();
         }  
     }else if(args[1] == "server"){
-        goapi.Listen(httpHandler, config["listen"]);
+        goapi.Listen(httpHandler, config["listen"], config["cert"], config["key"]);
     }else{
         showHelp();
     }
