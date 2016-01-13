@@ -16,9 +16,24 @@ $(document).ready(
         {
             list($("#user").val(),$("#pass").val(),error);
             
-        })        
+        })
+        $("#user").keyup(enterLogin);
+        $("#pass").keyup(enterLogin);
+        
+        $("#host").keyup(function(e){
+            if(e.which == 13){
+                wake($("#host").val(), $("#user").val(),$("#pass").val(),error);
+            }
+        });
+        
     }
-);
+)
+function enterLogin(e){
+    if(e.which == 13){
+        list($("#user").val(),$("#pass").val(),error);
+    }
+}
+        
 function error(response){
 
     if(response == "ok"){
@@ -42,8 +57,8 @@ function error(response){
         
         if(serverDown == true){
             serverDown = false
-            $("#error").hide();
         }
+        $("#error").hide();
     }
 
     return null;
